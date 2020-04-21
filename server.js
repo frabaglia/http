@@ -14,8 +14,15 @@ function requestHandler(req, res) {
         headers: req.headers, 
         method: req.method, 
         url: req.url,
-        query: url.query
+        path: url.path,
+        query: url.query,
+        path: url.path
     })
+
+    if (url.path === '/api') {
+        res.setHeaders('Content-Type', 'application/json')
+        res.write("{ body: 'you did a get', status: 200}")
+    }
     
     res.write('hi young padowan...')
     switch (req.method) {
@@ -40,8 +47,10 @@ function requestHandler(req, res) {
     }
 
     req.setEncoding('utf8')
+
     req.on('data', chunk => {
         console.log('receiving chunks from client', chunk)
     })
+
     res.end('for now i finished with you...'); 
 }

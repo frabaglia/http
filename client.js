@@ -19,7 +19,7 @@ const query =
         typeof process.env.QUERY === 'string' ? 
         process.env.QUERY : ''
 
-const url = '/'.concat(query)
+const url = '/api'.concat(query)
 
 const opts = {
     url,
@@ -31,15 +31,23 @@ const opts = {
 const req = http.request(opts, res => {
     res.setEncoding('utf8')
     res.on('data', chunk => console.log('receiving chunks from server ', chunk))
-    res.on('error', error => console.log('receving error event from response connection ', error.message))  
+    res.on('error', error => console.log('receving error event from response ', error.message))  
 })
 
 req.on('error', error => console.log('receving error event from request connection ', error.message))
+req.on('response', req => console.log('response event ', {
+    status: req.statusCode,
+    statusMessage: req.statusMessage,
+    headers: req.headers,
+    url: req.url,
+    readable: req.readable,
+    method: req.method
+}))
 
 if (process.env.METHOD !== 'GET' && 
     process.env.METHOD !== 'DELETE' &&
     typeof process.env.BODY === 'string')
     req.write(process.env.BODY)
 
-console.log({...opts})
+console.log('Starting request ', {...opts})
 req.end()
