@@ -1,20 +1,20 @@
 const http = require('http')
 const server = http.createServer()
-// const URL = require('url')
+const URL = require('url')
 
 server.on('request', requestHandler)
 
 server.listen(9000)
 
 function requestHandler(req, res) {
-    // const url = URL.parse(req.url)
+    const url = URL.parse(req.url)
 
     console.log({
         timestamp: Date.now(), 
         headers: req.headers, 
         method: req.method, 
         url: req.url,
-        // query: url.query
+        query: url.query
     })
     
     res.write('hi young padowan...')
