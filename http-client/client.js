@@ -17,7 +17,7 @@ isValidHTTPMethod(method)
 
 const query =
         typeof process.env.QUERY === 'string' ? 
-        process.env.QUERY : '?'
+        process.env.QUERY : ''
 
 const url = '/'.concat(query)
 
