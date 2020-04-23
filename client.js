@@ -1,5 +1,5 @@
 const http = require('http')
-const {client: repo, universal} = require('./utils')
+const {client: repo, universal} = require('./bin')
 
 const {
     method,

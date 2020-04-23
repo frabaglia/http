@@ -1,7 +1,7 @@
 const http = require('http')
 const server = http.createServer()
 const URL = require('url')
-const {server: repo, universal} = require('./utils')
+const {server: repo, universal} = require('./bin')
 
 const response = true ? 'hello world' : '{"txt":"hello world"}'
 const requestHandler = (req, res) => {
