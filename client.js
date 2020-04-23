@@ -1,53 +1,39 @@
 const http = require('http')
+const {client: repo, universal} = require('./utils')
 
-const isValidHTTPMethod = method => {
-    if (method === 'GET' || 
-        method === 'POST' || 
-        method === 'PUT' || 
-        method === 'DELETE' ||
-        method === 'PATCH') return
-    throw new Error('invalid http method')
-}
+const {
+    method,
+    query,
+    keepAlive,
+    keepAliveMsecs
+} = repo.getEnv(process.env.ENV)
 
-const method = 
-        typeof process.env.METHOD === 'string' ? 
-        process.env.METHOD : 'GET'
+universal.isValidHTTPMethod(method)
 
-isValidHTTPMethod(method)
-
-const query =
-        typeof process.env.QUERY === 'string' ? 
-        process.env.QUERY : ''
-
-const url = '/api'.concat(query)
-
+const agent = keepAlive ? new http.Agent({ keepAlive, keepAliveMsecs }) : undefined
+const url = `/${query}`
 const opts = {
     url,
     port: 9000,
     host: 'localhost',
-    method
+    method,
+    agent
 }
 
-const req = http.request(opts, res => {
-    res.setEncoding('utf8')
-    res.on('data', chunk => console.log('receiving chunks from server ', chunk))
-    res.on('error', error => console.log('receving error event from response ', error.message))  
-})
+const req = http.request(opts, res => universal.collectDataFromStreamHandler(res, 'CLIENT'))
 
-req.on('error', error => console.log('receving error event from request connection ', error.message))
-req.on('response', req => console.log('response event ', {
+req
+.on('response', req => console.log('> response >', {
     status: req.statusCode,
     statusMessage: req.statusMessage,
-    headers: req.headers,
-    url: req.url,
-    readable: req.readable,
-    method: req.method
+    headers: req.headers
 }))
+.on('error', error => console.log('> error >', error.message))
 
 if (process.env.METHOD !== 'GET' && 
     process.env.METHOD !== 'DELETE' &&
     typeof process.env.BODY === 'string')
     req.write(process.env.BODY)
 
-console.log('Starting request ', {...opts})
+console.log('Starting request', {...opts})
 req.end()
