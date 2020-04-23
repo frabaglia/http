@@ -51,11 +51,16 @@ const getEnv = env => {
         typeof process.env.KA === 'string' ?
         Number.parseInt(process.env.KA) : 0
 
+    const body =
+        typeof process.env.BODY === 'string' ?
+        Number.parseInt(process.env.BODY) : ''
+
     return {
         method,
         query,
         keepAlive,
-        keepAliveMsecs
+        keepAliveMsecs,
+        body
     }
 }
 

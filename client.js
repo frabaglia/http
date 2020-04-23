@@ -6,7 +6,8 @@ const {
 
 const {
     method,
-    query
+    query,
+    body
 } = repo.getEnv(process.env.ENV)
 
 universal.isValidHTTPMethod(method)
@@ -31,12 +32,11 @@ req
     }))
     .on('error', error => console.log('> error >', error.message))
 
-if (process.env.METHOD !== 'GET' &&
-    process.env.METHOD !== 'DELETE' &&
-    typeof process.env.BODY === 'string')
-    req.write(process.env.BODY)
+if (method !== 'GET' && method !== 'DELETE')
+    req.write(body)
 
-console.log('Starting request', {
+console.log('sending request', {
     ...opts
 })
+
 req.end()
