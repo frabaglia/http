@@ -1,7 +1,10 @@
 const http = require('http')
 const server = http.createServer()
 const URL = require('url')
-const {server: repo, universal} = require('./bin')
+const {
+    server: repo,
+    universal
+} = require('./bin')
 
 const response = true ? 'hello world' : '{"txt":"hello world"}'
 const requestHandler = (req, res) => {
@@ -13,8 +16,8 @@ const requestHandler = (req, res) => {
 }
 
 server
-.on('request', requestHandler)
-.listen(9000)
+    .on('request', requestHandler)
+    .listen(9000)
 
 // switch (req.method) {
 //     case "GET":const 
