@@ -3,24 +3,22 @@ const {client: repo, universal} = require('./utils')
 
 const {
     method,
-    query,
-    keepAlive,
-    keepAliveMsecs
+    query
 } = repo.getEnv(process.env.ENV)
 
 universal.isValidHTTPMethod(method)
 
-const agent = keepAlive ? new http.Agent({ keepAlive, keepAliveMsecs }) : undefined
 const url = `/${query}`
 const opts = {
     url,
     port: 9000,
     host: 'localhost',
-    method,
-    agent
+    method
 }
 
-const req = http.request(opts, res => universal.collectDataFromStreamHandler(res, 'CLIENT'))
+const req = http.request(opts, res => {
+    universal.collectDataFromStreamHandler(res, 'CLIENT')
+})
 
 req
 .on('response', req => console.log('> response >', {
