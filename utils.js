@@ -61,6 +61,15 @@ const getEnv = env => {
 }
 
 const response = (req, res, msg = '') => {
+    let contentType = 'text/plain'
+    try {
+        JSON.parse(msg)
+        contentType = 'application/json'
+    } catch (error) {
+        
+    }
+    
+    res.writeHead(200, { 'Content-Type': contentType });
     res.write(msg)
     res.end()
 }

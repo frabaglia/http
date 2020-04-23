@@ -3,12 +3,13 @@ const server = http.createServer()
 const URL = require('url')
 const {server: repo, universal} = require('./utils')
 
+const response = true ? 'hello world' : '{"txt":"hello world"}'
 const requestHandler = (req, res) => {
     universal.isValidHTTPMethod(req.method)
     universal.collectDataFromStreamHandler(req, 'SERVER')
 
     repo.requestLogger(req, res)
-    repo.response(req, res, 'hi young padowan... for now i finished with you...')
+    repo.response(req, res, response)
 }
 
 server
@@ -16,7 +17,7 @@ server
 .listen(9000)
 
 // switch (req.method) {
-//     case "GET":
+//     case "GET":const 
 //         res.write('you did a get')
 //         break;
 //     case "POST":
